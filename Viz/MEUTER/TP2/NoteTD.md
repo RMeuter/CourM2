@@ -56,3 +56,5 @@ Lancez votre algo de sur les diff graph et observez
 - le temps de calcul (est il assez rapide pour maintenir l'intéractivité de votre outil ?)
 - La qualité des résultats (via les criètre définis mais aussi via une analyse visuelle, au cas où les critères ne capturent pas toutes les propriétés du rendu final)
 
+
+
