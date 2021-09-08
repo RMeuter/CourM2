@@ -13,13 +13,13 @@ d3.json("flare.json").then(function(data) {
     var g = svg.append('g')
     .attr('transform', 'translate(' + w/2 + ',' + h/2 + ')');
     
-    
     var root = d3.hierarchy(data).sum(function (d) { return d.size})
     
     var partition = d3.partition()
     .size([2 * Math.PI, r]);
     
     partition(root)
+
     d = root;
 
     var color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -35,9 +35,12 @@ d3.json("flare.json").then(function(data) {
         .enter().append('path');
     arcs.attr("d", arc)
     .attr("stroke-width", 1).attr("stroke", "#FFFFFF")
-    .attr("fill", function(d) { 
+    .attr("fill", function(d) {
+        console.log(sameParent(d))
         if (d.depth > 0){
-            return color(d.height); 
+
+            return color(d.depth); 
+
         }
     });
     arcs.append("title").text(function(d) { return d.data.name; });
@@ -50,6 +53,14 @@ d3.json("flare.json").then(function(data) {
     
 })
 
+
+function sameParent(child) {
+    if (child.parent != null){
+        return child.data.name+ " "+ sameParent(child.parent)
+    } else {
+        return null
+    }
+}
 
 /*
 console.log("1")
