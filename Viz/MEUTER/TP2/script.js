@@ -5,6 +5,8 @@ var r = Math.min(w, h)/2;
 
 var d;
 
+var setParent = new Set();
+
 d3.json("flare.json").then(function(data) {
     var svg = d3.select("body").append("svg")
     .attr("width", w)
@@ -33,14 +35,28 @@ d3.json("flare.json").then(function(data) {
     var arcs = g.selectAll('.arcs')
         .data(root.descendants())
         .enter().append('path');
+
+
     arcs.attr("d", arc)
     .attr("stroke-width", 1).attr("stroke", "#FFFFFF")
     .attr("fill", function(d) {
-        console.log(sameParent(d))
+        var v = sameParent(d)
+
         if (d.depth > 0){
+            v = v.split(" ")
+            if (setParent.has(v[v.length-2] == false)){
+                setParent.add(v[v.length-2])
+            } 
+            let i=0;
+            for (let item of setParent.values()){
+                console.log(i++);
+            } 
+
 
             return color(d.depth); 
 
+        } else {
+            
         }
     });
     arcs.append("title").text(function(d) { return d.data.name; });
