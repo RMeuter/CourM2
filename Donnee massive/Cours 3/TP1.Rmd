@@ -1,0 +1,53 @@
+---
+title: "TP3"
+output: html_document
+---
+
+url : http://91.121.123.158/DataScienceBook/
+url : http://37.187.105.21/TW313MI/
+Liver : http://biostatisticien.eu/springeR/livreR.pdf
+
+
+
+```{r setup, include=FALSE}
+
+path = "Home/Documents/Donnee massive/Cours 3"
+
+```
+
+
+
+
+```{r}
+system.time({
+X <- read.csv("./DataExpo2009/1987.csv", header = TRUE)
+write.table(X[-1, ], file = "1987-copy.csv",
+quote = FALSE, sep = ",", row.names = FALSE,
+col.names = FALSE)
+})
+#q("no")
+getwd()
+```
+
+
+```{r}
+
+install.packages("bigmemory")
+library("bigmemory")
+
+system.time({
+X <- read.big.matrix("./DataExpo2009/airline.csv",
+header = TRUE, type = "integer",
+backingfile = "./DataExpo2009/airline.bin",
+descriptorfile = "./DataExpo2009/airline.desc")
+})
+```
+
+
+
+```{r}
+
+
+
+```
+
