@@ -1,6 +1,6 @@
 # TD2 : 
 
-## Exercice 1 :
+## Exercice 1:
 
 1. Les données concernées sont quantitatives et suivent une séquence ordonnée particulière (exemple temporelle).
 
@@ -21,7 +21,7 @@ sat/luminosité intervalle
 
 - : Effort cognitif plus important
 
-## Exercice 2 : (22')
+## Exercice 2: (22')
 1. C'est "Top pair - F".
 
 2. Top pair - R; Top Pair T;
@@ -29,4 +29,17 @@ sat/luminosité intervalle
 4. Top Pair-F (41')
 5. Chaque carré est un attribut on ordonne par ordre croissante. Puis on fait un escargot avec les valeurs (que l'on ajoute une teinte de couleur selon l'évolution de la variable).
 
+Variable visuelle : 
+-   
+
 Quand on compare avec les autres attributs on refait un nouvelle ordre mais on garde la couleur de l'attribut selectionné.
+    
+    [Cours 2 : 28 sep 2021]
+
+## Exercice 3: ()
+
+Structuration :
+- Sommet => entreprise => Série temporelle = évolution CA/secteur
+- Arretes => Fusion/acquisitions
+- Temps => x
+- Organisation spatiale => diagramme en flot (springgraph)
