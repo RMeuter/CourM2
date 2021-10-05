@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <link rel="stylesheet" href="style.css">
+    <head>
+        <meta charset="UTF-8" />
+        <title> TP1 : Graphs </title>
+    </head>
+
+    <script	src="http://d3js.org/d3.v6.min.js"></script>
+    <script src="script.js"></script>
+
+    <body>
+
+        <script>
+            var w = 500, h = 500;
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+            var g = svg.append("g").attr("class", "tout");
+
+            var link;
+
+            d3.json("../miserables.json").then(function(graph) {
+
+                links = g.selectAll(".link") // init line objects
+                    .data(graph.links)
+                    .enter().append("line");
+
+                var nodes = g.selectAll(".node") // init circle objects
+                    .data(graph.nodes)
+                    .enter().append("circle");
+                nodes.attr("class", "node") // positionne les noeuds
+                    .attr("id", function(d) { return "node"+d.id; } )
+                    .attr("r", 5)
+                    .attr("cx", function(d) { return rand(1, w); } )
+                    .attr("cy", function(d) { return rand(1, h); } )
+                    .attr("fill", function(d) { return color(d.group); } )
+
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended))
+
+                    .append("title").text(function(d) { return d.name; }); // infobulle
+
+                links.attr("class", "link") // positionne les liens
+                    .attr("id", function(d) { return ""+d.source+"-"+d.target; })
+                    .attr("x1", function(d) { return d3.select("#node"+d.source).attr("cx"); })
+                    .attr("y1", function(d) { return d3.select("#node"+d.source).attr("cy"); })
+                    .attr("x2", function(d) { return d3.select("#node"+d.target).attr("cx"); })
+                    .attr("y2", function(d) { return d3.select("#node"+d.target).attr("cy"); });
+
+                var forceDirectedLayout = d3.forceSimulation()
+                    .nodes(graph.nodes)
+                    .force("repulsion", d3.forceManyBody())
+                    .force("attraction", d3.forceLink(graph.links))
+                    .force("center", d3.forceCenter(w / 2, h / 2));
+
+                forceDirectedLayout.on("tick", function() {
+                    links.attr("x1", function(d) { return d.source.x; })
+                        .attr("y1", function(d) { return d.source.y; })
+                        .attr("x2", function(d) { return d.target.x; })
+                        .attr("y2", function(d) { return d.target.y; });
+                    nodes.attr("cx", function(d) { return d.x; })
+                        .attr("cy", function(d) { return d.y; });
+                });
+
+                
+
+                function dragstarted(e, d) {
+                    if (!e.active)
+                        forceDirectedLayout.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                }
+
+                function dragged(e, d) {
+                    d.fx = e.x;
+                    d.fy = e.y;
+                }
+
+                function dragended(e, d) {
+                    if (!e.active)
+                        forceDirectedLayout.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                }
+
+
+            });
+            
+            var z = d3.zoom();
+                z.on("zoom", function({transform}){
+                    g.attr("transform", transform);}
+                );
+                svg.call(z);
+
+        </script>
+
+    </body>
+</html>

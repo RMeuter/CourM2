@@ -2,74 +2,92 @@ var h = 500;
 var w = 500;
 var r = 5;
 
-var svg = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
-function rand(mi, ma){
-    return Math.random()*(ma-mi)+mi;
+function rand(mi, ma) {
+  return Math.random() * (ma - mi) + mi;
 }
-
-
 
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+var gGlobal = svg.append("svg");
 
-d3.json("miserables.json").then(function(graph) {  
-    
+d3.json("miserables.json").then(function (graph) {
+  // for(i=0;i<graph.nodes.length;i++){
+  //     var node = svg.append("circle"); // ajout d’un cercle
+  //     node.attr("r", r);
+  //     node.attr("id", "node"+graph.nodes[i].id); // identifiant
+  //     // node.attr("cx", ); // position X
+  //     // node.attr("cy", ); // position y
+  //     node.attr("class", ".node"); // ajout d'une classe
+  //     node.attr("fill", function(d) { return color(graph.nodes[i].group) });
+  // }
 
+  // gxAxisCloud = svgCloud.append("g")
+	// 	.call(xAxisCloud)
+	// 	.attr("transform","translate(25,"+(hCloud-25)+")");
 
-    // for(i=0;i<graph.nodes.length;i++){
-    //     var node = svg.append("circle"); // ajout d’un cercle
-    //     node.attr("r", r); 
-    //     node.attr("id", "node"+graph.nodes[i].id); // identifiant
-    //     // node.attr("cx", ); // position X
-    //     // node.attr("cy", ); // position y
-    //     node.attr("class", ".node"); // ajout d'une classe
-    //     node.attr("fill", function(d) { return color(graph.nodes[i].group) });
-    // }
+  var link = gGlobal
+  .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links)
+  .enter().append("line")
+  .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-    
-    var nodes = svg.selectAll(".node")
-        .data(graph.nodes)
-        .enter().append("circle");
-    nodes.attr("stroke", "#aaaaaa")
-        .attr("r", 5)
-        .attr("id", function(d) { return "node"+d.id; } )
-        .attr("cx", function(d) { return rand(2*r, w-2*r); } )
-        .attr("cy", function(d) { return rand(2*r, h-2*r); } )
-        .attr("fill", function(d) { return color(d.group) });
+  var nodes = gGlobal
+  .attr("class", "nodes")
+    .selectAll(".node")
+    .data(graph.nodes)
+    .enter()
+    .append("circle");
+  nodes
+    .attr("stroke", "#aaaaaa")
+    .attr("r", 5)
+    .attr("id", function (d) {
+      return "node" + d.id;
+    })
+    .attr("cx", function (d) {
+      return rand(2 * r, w - 2 * r);
+    })
+    .attr("cy", function (d) {
+      return rand(2 * r, h - 2 * r);
+    })
+    .attr("fill", function (d) {
+      return color(d.group);
+    });
 
-    var links = svg.selectAll(".link")
-        .data(graph.links)
-        .enter().append("line");
-        links.attr( "x1", function(d){ return d3.select("#node"+d.source).attr("cx");});
-        links.attr( "y1", function(d){ return d3.select("#node"+d.source).attr("cy");});
-        links.attr( "x2", function(d){ return d3.select("#node"+d.target).attr("cx");});
-        links.attr( "y2", function(d){ return d3.select("#node"+d.target).attr("cy");});
-        links.attr("stroke-width", function(d){ return Math.sqrt(d.value);})
-        links.style("opacity", 0.6);
-        links.attr("stroke", "#aaaaaa"); // couleur de la bordure
+    var drag_handler = d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended);
 
+    drag_handler(node);
 
-    var forceDirectedLayout = d3.forceSimulation()
-    .nodes(graph.nodes)
-    .force("repulsion", d3.forceManyBody())
-    .force("attraction", d3.forceLink(graph.links))
-    .force("center", d3.forceCenter(w / 2, h / 2));
+  //   var z = d3.zoom();
+  //   z.on("zoom", function ({ transform }) {
+  //     svg.attr("transform", transform);
+  //   });
+  //   svg.call(z);
+  function dragstarted(e, d) {
+    if (!e.active) forceDirectedLayout.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  function dragged(e, d) {
+    d.fx = e.x;
+    d.fy = e.y;
+  }
+  function dragended(e, d) {
+    if (!e.active) forceDirectedLayout.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
 
-    forceDirectedLayout.on("tick", function() {
-        links
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-        nodes
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-        }
-    );
-
+  gGlobal.call(
+    d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended)
+  ); //Il faut ensuite définir les fonction dragstarted, draggedet dragendedainsi:function dragstarted(e, d) {if (!e.active) forceDirectedLayout.alphaTarget(0.3).restart();d.fx = d.x;d.fy = d.y;}function dragged(e, d) {d.fx = e.x;d.fy = e.y;}function dragended(e, d) {if (!e.active) forceDirectedLayout.alphaTarget(0);d.fx = null;d.fy = null;}
 
 });

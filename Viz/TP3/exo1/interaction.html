@@ -14,27 +14,31 @@
    			<div id="tootlbar">
 				   <h1>Boite à outils</h1>
 				   <p>
-					Axe X du nuage de points :<br />
-					<input type="radio" name="radioXCloud" onClick="updateCloudX('petal_length')">Longueur des pétales<br />
-					<input type="radio" name="radioXCloud" onClick="updateCloudX('petal_width')">Largeur des pétales<br />
-					<input type="radio" name="radioXCloud" onClick="updateCloudX('sepal_length')">Longueur des sépales<br />
-					<input type="radio" name="radioXCloud" onClick="updateCloudX('sepal_width')" checked>Largeur des sépales<br />
+					Axe X:<br />
+					<input type="radio" name="radioXCloud" onClick="updateCloudX('petal_length');updateHistX('petal_length')"checked>Longueur des pétales<br />
+					<input type="radio" name="radioXCloud" onClick="updateCloudX('petal_width');updateHistX('petal_width')">Largeur des pétales<br />
+					<input type="radio" name="radioXCloud" onClick="updateCloudX('sepal_length');updateHistX('sepal_length')">Longueur des sépales<br />
+					<input type="radio" name="radioXCloud" onClick="updateCloudX('sepal_width');updateHistX('sepal_width')">Largeur des sépales<br />
 					</p>
 
 					<p>
 						Axe Y du nuage de points :<br />
 						<input type="radio" name="radioYCloud" onClick="updateCloudY('petal_length')">Longueur des pétales<br />
-						<input type="radio" name="radioYCloud" onClick="updateCloudY('petal_width')">Largeur des pétales<br />
+						<input type="radio" name="radioYCloud" onClick="updateCloudY('petal_width')" checked>Largeur des pétales<br />
 						<input type="radio" name="radioYCloud" onClick="updateCloudY('sepal_length')">Longueur des sépales<br />
-						<input type="radio" name="radioYCloud" onClick="updateCloudY('sepal_width')" checked>Largeur des sépales<br />
+						<input type="radio" name="radioYCloud" onClick="updateCloudY('sepal_width')" >Largeur des sépales<br />
 					</p>
 
 					<p>
+						Nombre de classes: 
+						<input type="number" id="nbClasses" onchange="updateNbClasses()" value=15>
+						<!--
 						Axe X de l'histogram :<br />
-						<input type="radio" name="radioXHist" onClick="updateHistX('petal_length')">Longueur des pétales<br />
+						<input type="radio" name="radioXHist" onClick="updateHistX('petal_length')" checked>Longueur des pétales<br />
 						<input type="radio" name="radioXHist" onClick="updateHistX('petal_width')">Largeur des pétales<br />
-						<input type="radio" name="radioXHist" onClick="updateHistX('sepal_length')">Longueur des sépales<br />
-						<input type="radio" name="radioXHist" onClick="updateHistX('sepal_width')" checked>Largeur des sépales<br />
+						<input type="radio" name="radioXHist" onClick="updateHistX('sepal_length')" >Longueur des sépales<br />
+						<input type="radio" name="radioXHist" onClick="updateHistX('sepal_width')" >Largeur des sépales<br />
+						!-->
 					</p>
    			 </div>
    			 <div id="cloud">
